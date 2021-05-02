@@ -5,7 +5,7 @@ import css
 ENCODED_FILE = []
 DECODED_FILE = []
 
-# Decodes it to python turtle language
+# Decodes it to python turtle language - Will be used for exporting
 def decode():
     """
     This function will convert the user's code, which is in the ENCODED_FILE variable, to python
@@ -58,7 +58,7 @@ def decode():
 
     return DECODED_FILE
 
-# Encodes it to user's code
+# Encodes it to user's code - Will be used for importing
 def encode():
     """
     This function will convert the python turtle code, which is in the DECODED_FILE variable, to user's
@@ -106,6 +106,47 @@ def encode():
         ENCODED_FILE.append(user_code)
 
     return ENCODED_FILE
+
+# This will run the program with the help of the ENCODED_FILE
+def run():
+    """
+    This will add some additional lines of code to the DECODED_FILE and will run the program
+    """
+
+    # Initialize turtle
+    my_turtle = turtle.Turtle()
+
+    for i in ENCODED_FILE:
+        first_part = i.split()[0] # This is the command: Example "pen", "move", "turn"
+        second_part = i.split()[1] # This is the 2nd part of the command: "forward", "up", "left"
+
+        if first_part == "move":
+            if second_part == "forward":
+                steps = i.split()[2]
+                my_turtle.forward(int(steps))
+
+            if second_part == "backward":
+                steps = i.split()[2]
+
+                my_turtle.backward(int(steps))
+
+        elif first_part == "pen":
+            if second_part == "up":
+                my_turtle.penup()
+
+            if second_part == "down":
+                my_turtle.pendown()
+
+        elif first_part == "turn":
+            if second_part == "left":
+                degrees = i.split()[2]
+                my_turtle.left(int(degrees))
+
+            if second_part == "right":
+                degrees = i.split()[2]
+                my_turtle.right(int(degrees))
+
+    turtle.done()
 
 # Greet
 print("Hi. Welcome to Turtle Nursery where you can create python turtle files without writing a single line of code")
