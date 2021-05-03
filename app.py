@@ -1,5 +1,7 @@
 import turtle
 import css
+from tkinter import filedialog
+import os
 
 # Functions and global variables
 ENCODED_FILE = []
@@ -147,6 +149,21 @@ def run():
                 my_turtle.right(int(degrees))
 
     turtle.done()
+
+# This function will save the user written code in a txt file
+def save():
+    # Ask the directory to save the file
+    directory = filedialog.asksaveasfilename(initialdir=os.getcwd(), title="Save as...", filetypes=[("Text file", "*.txt")])
+
+    # Open that txt file
+    file = open(directory, "a")
+
+    # Write the user's code
+    for i in ENCODED_FILE:
+        file.write(f"{i}\n")
+
+    # Close the text file
+    file.close()
 
 # Greet
 print("Hi. Welcome to Turtle Nursery where you can create python turtle files without writing a single line of code")
