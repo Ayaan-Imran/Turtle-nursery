@@ -151,19 +151,39 @@ def run():
     turtle.done()
 
 # This function will save the user written code in a txt file
-def save():
+def save_file():
     # Ask the directory to save the file
     directory = filedialog.asksaveasfilename(initialdir=os.getcwd(), title="Save as...", filetypes=[("Text file", "*.txt")])
 
-    # Open that txt file
-    file = open(directory, "a")
+    # Check if directory was chosen
+    if directory != "":
+        directory += ".txt"
 
-    # Write the user's code
-    for i in ENCODED_FILE:
-        file.write(f"{i}\n")
+        # Open that txt file
+        file = open(directory, "a")
 
-    # Close the text file
-    file.close()
+        # Write the user's code
+        for i in ENCODED_FILE:
+            file.write(f"{i}\n")
+
+        # Close the text file
+        file.close()
+
+# This function will open a file and save it to the ENCODED_FILE variable
+def open_file():
+    global ENCODED_FILE
+    ENCODED_FILE.clear()
+
+    # Ask the dialogue box for opening a file
+    directory = filedialog.askopenfilename(initialdir=os.getcwd(), title="Open file...", filetypes=[("Text file", "*.txt")])
+
+    # Open that file
+    with open(directory, "r") as file:
+        # Read each line and append it to the ENCODED_FILE variable
+        for i in file.readlines():
+            line = i.replace("\n", "") # Removes the new line
+
+            ENCODED_FILE.append(line)
 
 # Greet
 print("Hi. Welcome to Turtle Nursery where you can create python turtle files without writing a single line of code")
