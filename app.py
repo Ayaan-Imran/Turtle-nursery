@@ -185,6 +185,28 @@ def open_file():
 
             ENCODED_FILE.append(line)
 
+# This function will add user's code to the ENCODED_FILE variable
+def edit_file(move):
+    global ENCODED_FILE
+
+    command = move.split(",")[0] # "move forward, 10" ==> ["move forward", "10") ==> "move forward"
+    steps = move.split(",")[1] # "move forward, 10" ==> ["move forward", "10") ==> "10"
+    hint_command = command.split()[0] # This is the hint command to see what type of command it is. For example "move", "pen", "turn" or "delete"
+
+    if hint_command == "move":
+        ENCODED_FILE.append(f"{command} {steps} steps")
+
+    elif hint_command == "pen":
+        ENCODED_FILE.append(command)
+
+    elif hint_command == "turn":
+        ENCODED_FILE.append(f"{command} {steps} degrees")
+
+    elif hint_command == "delete":
+        index = int(steps) - 1 # This will convert the steps to an index
+
+        ENCODED_FILE.pop(index) # Delete the element in the index position
+
 # Greet
 print("Hi. Welcome to Turtle Nursery where you can create python turtle files without writing a single line of code")
 print()
