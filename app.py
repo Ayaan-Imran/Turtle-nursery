@@ -119,6 +119,9 @@ def run():
     # Initialize turtle
     my_turtle = turtle.Turtle()
 
+    # Adds delay to the turtle
+    turtle.delay(1000)
+
     for i in ENCODED_FILE:
         first_part = i.split()[0] # This is the command: Example "pen", "move", "turn"
         second_part = i.split()[1] # This is the 2nd part of the command: "forward", "up", "left"
