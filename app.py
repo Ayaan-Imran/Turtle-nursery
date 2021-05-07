@@ -2,6 +2,7 @@ import turtle
 import css
 from tkinter import filedialog
 import os
+import time
 
 # Functions and global variables
 ENCODED_FILE = []
@@ -206,11 +207,71 @@ def edit_file(move):
         index = int(steps) - 1 # This will convert the steps to an index
 
         ENCODED_FILE.pop(index) # Delete the element in the index position
+    else:
+         print("Wrong syntax")
 
 # Greet
 print("Hi. Welcome to Turtle Nursery where you can create python turtle files without writing a single line of code")
 print()
+time.sleep(2)
+os.system("cls")
 
 # The main part
+
 while True:
-    pass
+    # Display command panel: What do you want to do run [r] edit [e] file settings [f]
+    part_1 = css.color("run [r]", css.RED)
+    part_2 = css.color("edit [e]", css.YELLOW)
+    part_3 = css.color("file settings [f]", css.GREEN)
+    ask_text = f"What do you want to do {part_1} {part_2} {part_3} exit [ex]: "
+    command = input(ask_text)
+
+    # Check what is the command
+    if (command == "r") or (command == "run"):
+        print(css.color("Running...", css.RED))
+        run()
+        continue
+
+    elif command == "ex":
+        break
+
+    elif (command == "edit") or (command == "e"):
+        os.system("cls")
+
+        text_1 = css.color("move forward", css.RED)
+        text_2 = css.color("move backward", css.RED)
+        text_3 = css.color("turn right", css.YELLOW)
+        text_4 = css.color("turn left", css.YELLOW)
+        text_5 = css.color("pen up", css.GREEN)
+        text_6 = css.color("pen down", css.GREEN)
+        text_7 = css.color("delete", css.BLUE)
+
+        code = ""
+        line_number = 0
+        while True:
+            # Update the code for displaying
+            line_number = 0
+            code = ""
+            for i in ENCODED_FILE:
+                line_number += 1
+                code += f"{line_number}. {i}\n"
+
+            # Print the instructions and code
+            total_text = f"{css.color('The commands', css.CYAN)} \n{text_1}, {text_2}, {text_3}, {text_4}, {text_5}, {text_6}, {text_7}\n\n{code}\n"
+            print(total_text)
+
+            # Ask the command
+            total_move = input("Type your command here. Sytax: command,steps. For exiting mode [ex]: ")
+
+            # Check if user want to exit
+            if total_move != "ex":
+                # Edit the file
+                edit_file(total_move)
+
+            elif total_move == "ex":
+                # Break the loop will exit the program
+                break
+
+            os.system("cls")
+
+        continue
