@@ -119,8 +119,8 @@ def run():
     # Initialize turtle
     my_turtle = turtle.Turtle()
 
-    # Adds delay to the turtle
-    turtle.delay(1000)
+    # Add delay to the turtle
+    time.sleep(2)
 
     for i in ENCODED_FILE:
         first_part = i.split()[0] # This is the command: Example "pen", "move", "turn"
@@ -229,9 +229,11 @@ while True:
     ask_text = f"What do you want to do {part_1} {part_2} {part_3} exit [ex]: "
     command = input(ask_text)
 
+    delay = True
     # Check what is the command
     if (command == "r") or (command == "run"):
         print(css.color("Running...", css.RED))
+
         run()
         continue
 
@@ -278,3 +280,26 @@ while True:
             os.system("cls")
 
         continue
+
+    elif (command == "file setting") or (command == "file settings") or (command == "f"):
+        text_1 = css.color("Open file [o]", css.YELLOW)
+        text_2 = css.color("Save file [s]", css.GREEN)
+
+        while True:
+            sub_command = input(f"Type your command here. {text_1}, {text_2}. For exiting mode [ex]: ")
+
+            print()
+
+            if (sub_command == "o") or (sub_command == "open"):
+                print("Openning...")
+
+                open_file()
+            elif (sub_command == "s") or (sub_command == "save"):
+                print("Saving...")
+
+                save_file()
+
+            elif sub_command == "ex":
+                break
+
+    continue
