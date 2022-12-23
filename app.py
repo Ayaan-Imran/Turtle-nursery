@@ -1,5 +1,5 @@
 import turtle
-import css
+import termcolor
 from tkinter import filedialog
 import os
 import time
@@ -7,6 +7,14 @@ import time
 # Functions and global variables
 ENCODED_FILE = []
 DECODED_FILE = []
+my_turtle = turtle.Turtle()
+positive = termcolor.colored('[', 'cyan') + termcolor.colored('+', 'green') + termcolor.colored(']', 'cyan') + ' '
+neutral = termcolor.colored('[', 'cyan') + termcolor.colored('-', 'yellow') + termcolor.colored(']', 'cyan') + ' '
+negative = termcolor.colored('[', 'cyan') + termcolor.colored('!', 'red') + termcolor.colored(']', 'cyan') + ' '
+
+# Formatting tool
+def number(number):
+    return termcolor.colored('[', 'cyan') + termcolor.colored(str(number), 'yellow') + termcolor.colored(']', 'cyan') + ' '
 
 # Decodes it to python turtle language - Will be used for exporting
 def decode():
@@ -115,10 +123,6 @@ def run():
     """
     This will add some additional lines of code to the DECODED_FILE and will run the program
     """
-
-    # Initialize turtle
-    my_turtle = turtle.Turtle()
-
     # Add delay to the turtle
     time.sleep(2)
 
@@ -153,6 +157,7 @@ def run():
                 my_turtle.right(int(degrees))
 
     turtle.done()
+    
 
 # This function will save the user written code in a txt file
 def save_file():
@@ -172,6 +177,11 @@ def save_file():
 
         # Close the text file
         file.close()
+        
+        return True
+        
+    else:
+        return None
 
 # This function will open a file and save it to the ENCODED_FILE variable
 def open_file():
@@ -180,7 +190,11 @@ def open_file():
 
     # Ask the dialogue box for opening a file
     directory = filedialog.askopenfilename(initialdir=os.getcwd(), title="Open file...", filetypes=[("Text file", "*.txt")])
-
+    
+    # Check if the user declined on chosing a file
+    if directory == "":
+        return None
+    
     # Open that file
     with open(directory, "r") as file:
         # Read each line and append it to the ENCODED_FILE variable
@@ -188,6 +202,8 @@ def open_file():
             line = i.replace("\n", "") # Removes the new line
 
             ENCODED_FILE.append(line)
+            
+    return True
 
 # This function will add user's code to the ENCODED_FILE variable
 def edit_file(move):
@@ -213,43 +229,54 @@ def edit_file(move):
     else:
          print("Wrong syntax")
 
-# Greet
-print("Hi. Welcome to Turtle Nursery where you can create python turtle files without writing a single line of code")
-print()
-time.sleep(2)
-os.system("cls")
+# Greet the user
+try:
+    termcolor.cprint("Welcome to Turtle Nursery", "blue", attrs=["underline"])
+    print(termcolor.colored("Turtle nursery", "cyan") + " helps a user to use the turtle module in python without coding.")
 
+    while True:
+        print("\r", end="\r")
+        
+except KeyboardInterrupt:
+    dots = "" 
+    for i in range(4):
+        os.system("cls")
+        print("\r" + termcolor.colored("Proceeding" + dots, "blue"), end="\r")
+        dots += "."
+        time.sleep(0.5)
+    
 # The main part
-
 while True:
+    # Clear screen everytime user enters main screen
+    os.system("cls")
+    
     # Display command panel: What do you want to do run [r] edit [e] file settings [f]
-    part_1 = css.color("run [r]", css.RED)
-    part_2 = css.color("edit [e]", css.YELLOW)
-    part_3 = css.color("file settings [f]", css.GREEN)
-    ask_text = f"What do you want to do {part_1} {part_2} {part_3} exit [ex]: "
-    command = input(ask_text)
+    print(number(1) + "Run commands")
+    print(number(2) + "Edit commands")
+    print(number(3) + "File settings [Save commands to file] [Open existing commands from file]")
+    print()
+    command = input(neutral + f"Enter the index number of the corresponding functions {termcolor.colored('[ENTER] to exit', 'grey')}: ")
 
-    delay = True
     # Check what is the command
-    if (command == "r") or (command == "run"):
-        print(css.color("Running...", css.RED))
+    if command == "1":
+        print(positive + "Running...")
 
         run()
         continue
 
-    elif command == "ex":
+    elif command == "":
         break
 
-    elif (command == "edit") or (command == "e"):
+    elif command == "2":
         os.system("cls")
 
-        text_1 = css.color("move forward", css.RED)
-        text_2 = css.color("move backward", css.RED)
-        text_3 = css.color("turn right", css.YELLOW)
-        text_4 = css.color("turn left", css.YELLOW)
-        text_5 = css.color("pen up", css.GREEN)
-        text_6 = css.color("pen down", css.GREEN)
-        text_7 = css.color("delete", css.BLUE)
+        text_1 = termcolor.colored("move forward", "red")
+        text_2 = termcolor.colored("move backward", "red")
+        text_3 = termcolor.colored("turn right", "yellow")
+        text_4 = termcolor.colored("turn left", "yellow")
+        text_5 = termcolor.colored("pen up", "green")
+        text_6 = termcolor.colored("pen down", "green")
+        text_7 = termcolor.colored("delete", "blue")
 
         code = ""
         line_number = 0
@@ -259,47 +286,66 @@ while True:
             code = ""
             for i in ENCODED_FILE:
                 line_number += 1
-                code += f"{line_number}. {i}\n"
+                code += f"{number(line_number)}{i}\n"
 
             # Print the instructions and code
-            total_text = f"{css.color('The commands', css.CYAN)} \n{text_1}, {text_2}, {text_3}, {text_4}, {text_5}, {text_6}, {text_7}\n\n{code}\n"
+            print(termcolor.colored("Commands available", "cyan", attrs=["underline"]))
+            total_text = f"{text_1}, {text_2}, {text_3}, {text_4}, {text_5}, {text_6}, {text_7}\n\n{code}\n"
             print(total_text)
 
             # Ask the command
-            total_move = input("Type your command here. Sytax: command,steps. For exiting mode [ex]: ")
-
-            # Check if user want to exit
-            if total_move != "ex":
-                # Edit the file
-                edit_file(total_move)
-
-            elif total_move == "ex":
+            move = input(f"Enter the command from the list above {termcolor.colored('[ENTER] to exit', 'grey')}: ")
+            if move == "":
                 # Break the loop will exit the program
                 break
+            
+            quantity = input(f"Enter the quantity [e.g. steps, degrees] relating to the command selected {termcolor.colored('[ENTER] to exit', 'grey')}: ")
+            if quantity == "":
+                # Break the loop will exit the program
+                break
+            
+            # Edit the file
+            total_move = move + "," + quantity
+            edit_file(total_move)
 
             os.system("cls")
 
         continue
 
-    elif (command == "file setting") or (command == "file settings") or (command == "f"):
-        text_1 = css.color("Open file [o]", css.YELLOW)
-        text_2 = css.color("Save file [s]", css.GREEN)
+    elif command == "3":
+        os.system("cls")
+        termcolor.cprint("File settings", "blue", attrs=["underline"])
+        text_1 = termcolor.colored("Open file [o]", "yellow")
+        text_2 = termcolor.colored("Save file [s]", "yellow")
 
         while True:
-            sub_command = input(f"Type your command here. {text_1}, {text_2}. For exiting mode [ex]: ")
-
+            sub_command = input(f"{neutral}Enter command here {text_1}, {text_2} {termcolor.colored('[ENTER] to exit', 'grey')}: ")
             print()
 
             if (sub_command == "o") or (sub_command == "open"):
-                print("Openning...")
-
-                open_file()
+                result = open_file()
+                
+                # Check if None was returned (which means that the user did not select a file)
+                if result == None:
+                    print(negative + "Declining operation...\n")
+                
+                else:
+                    print(positive + "File opened successfully.\n")
+                
             elif (sub_command == "s") or (sub_command == "save"):
-                print("Saving...")
+                result = save_file()
+                
+                # Check if the result is None
+                if result == None:
+                    print(negative + "Declining operation...\n")
+                    
+                else:
+                    print(positive + "File saved successfully.\n")
 
-                save_file()
-
-            elif sub_command == "ex":
+            elif sub_command == "":
                 break
-
+            
+            else:
+                print(negative + "Invalid command!\n")
+    
     continue
