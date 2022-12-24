@@ -158,7 +158,6 @@ def run():
 
     turtle.done()
     
-
 # This function will save the user written code in a txt file
 def save_file():
     # Ask the directory to save the file
@@ -226,8 +225,14 @@ def edit_file(move):
         index = int(steps) - 1 # This will convert the steps to an index
 
         ENCODED_FILE.pop(index) # Delete the element in the index position
+        
+    elif hint_command == "square":
+        for _ in range(4):
+            edit_file("move forward," + steps)
+            edit_file("turn right,90")
+        
     else:
-         print("Wrong syntax")
+         return False
 
 # Greet the user
 try:
