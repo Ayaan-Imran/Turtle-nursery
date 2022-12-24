@@ -282,6 +282,7 @@ while True:
         text_5 = termcolor.colored("pen up", "green")
         text_6 = termcolor.colored("pen down", "green")
         text_7 = termcolor.colored("delete", "blue")
+        text_8 = termcolor.colored("square", "blue")
 
         code = ""
         line_number = 0
@@ -295,7 +296,7 @@ while True:
 
             # Print the instructions and code
             print(termcolor.colored("Commands available", "cyan", attrs=["underline"]))
-            total_text = f"{text_1}, {text_2}, {text_3}, {text_4}, {text_5}, {text_6}, {text_7}\n\n{code}\n"
+            total_text = f"{text_1}, {text_2}, {text_3}, {text_4}, {text_5}, {text_6}, {text_7}, {text_8}\n\n{code}\n"
             print(total_text)
 
             # Ask the command
