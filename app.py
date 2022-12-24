@@ -3,6 +3,7 @@ import termcolor
 from tkinter import filedialog
 import os
 import time
+import beautifultable
 
 # Functions and global variables
 ENCODED_FILE = []
@@ -11,6 +12,19 @@ my_turtle = turtle.Turtle()
 positive = termcolor.colored('[', 'cyan') + termcolor.colored('+', 'green') + termcolor.colored(']', 'cyan') + ' '
 neutral = termcolor.colored('[', 'cyan') + termcolor.colored('-', 'yellow') + termcolor.colored(']', 'cyan') + ' '
 negative = termcolor.colored('[', 'cyan') + termcolor.colored('!', 'red') + termcolor.colored(']', 'cyan') + ' '
+
+table = beautifultable.BeautifulTable()
+indexes = [i+1 for i in range(9)]
+commands = ["move forward", "move backward", "turn right", "turn left", "pen up", "pen down", "delete", "square", "rectangle"]
+quantities = ["Number of steps", "Number of steps", "Number of degrees", "Number of degrees", "[NO QUANITY REQUIRED]", "[NO QUANITY REQUIRED]", "Index number of quantity", "Number of steps", "Number of steps"]
+syntaxes = ["steps", "steps", "degrees", "degrees", "[RANDOM VALUE]", "[RANDOM VALUE]", "index number", "steps", "side 1:side 2"]
+table.columns.append(indexes, header="Index")
+table.columns.append(commands, header="Command")
+table.columns.append(quantities, header="Quantity")
+table.columns.append(syntaxes, header="Synatx")
+table.set_style(beautifultable.STYLE_BOX_ROUNDED)
+table.columns.header.alignment = beautifultable.ALIGN_CENTER
+table.columns.alignment = beautifultable.ALIGN_LEFT
 
 # Formatting tool
 def number(number):
@@ -205,7 +219,7 @@ def open_file():
     return True
 
 # This function will add user's code to the ENCODED_FILE variable
-def edit_file(move):
+def edit_file(move:str):
     global ENCODED_FILE
 
     command = move.split(",")[0] # "move forward, 10" ==> ["move forward", "10") ==> "move forward"
@@ -230,9 +244,34 @@ def edit_file(move):
         for _ in range(4):
             edit_file("move forward," + steps)
             edit_file("turn right,90")
+            
+    elif hint_command == "rectangle":
+        side_1 = steps.split(":")[0]
+        side_2 = steps.split(":")[1]
+        for i in range(1, 5):
+            if i % 2 == 0: # Even number
+                edit_file("move forward," + side_2)
+                edit_file("turn right,90")
+            else:
+                edit_file("move forward," + side_1)
+                edit_file("turn right,90")
+        
         
     else:
          return False
+
+# This function will display the quantities for each of the commands
+def quantities_help():
+    # Print the title
+    os.system("cls")
+    termcolor.cprint("Commands' quantities", "blue", attrs=["underline"])
+    print("Use the table as reference to each commands' required quantities")
+    print()
+    print(table)
+    print()
+    
+    input(f"Hit {termcolor.colored('[ENTER]', 'grey')} to exit")
+    return True
 
 # Greet the user
 try:
@@ -275,15 +314,6 @@ while True:
     elif command == "2":
         os.system("cls")
 
-        text_1 = termcolor.colored("move forward", "red")
-        text_2 = termcolor.colored("move backward", "red")
-        text_3 = termcolor.colored("turn right", "yellow")
-        text_4 = termcolor.colored("turn left", "yellow")
-        text_5 = termcolor.colored("pen up", "green")
-        text_6 = termcolor.colored("pen down", "green")
-        text_7 = termcolor.colored("delete", "blue")
-        text_8 = termcolor.colored("square", "blue")
-
         code = ""
         line_number = 0
         while True:
@@ -296,19 +326,45 @@ while True:
 
             # Print the instructions and code
             print(termcolor.colored("Commands available", "cyan", attrs=["underline"]))
-            total_text = f"{text_1}, {text_2}, {text_3}, {text_4}, {text_5}, {text_6}, {text_7}, {text_8}\n\n{code}\n"
-            print(total_text)
+            print()
+            total_print = ""
+            colors = ["red", "yellow", "blue"]
+            color_index = 0
+            for index, i in enumerate(commands):
+                if index % 3 != 0:
+                    color_index += 1
+                    
+                i = termcolor.colored(i, colors[color_index])
+                
+                if index != (len(commands) - 1):
+                    total_print += i + ", "
+                else:
+                    total_print += i
+                    
+                if color_index == 2:
+                    color_index = 0
+            print(total_print + "\n\n" + code + "\n")
 
             # Ask the command
-            move = input(f"Enter the command from the list above {termcolor.colored('[ENTER] to exit', 'grey')}: ")
+            move = input(f"Enter the command from the list above {termcolor.colored('[ENTER] to exit, [help] for quantities', 'grey')}: ")
             if move == "":
                 # Break the loop will exit the program
                 break
             
-            quantity = input(f"Enter the quantity [e.g. steps, degrees] relating to the command selected {termcolor.colored('[ENTER] to exit', 'grey')}: ")
+            if (move.lower() == "h") or (move.lower() == "help"):
+                if quantities_help() == True:
+                    os.system("cls")
+                    continue
+            
+            quantity = input(f"Enter the quantity [e.g. steps, degrees] relating to the command selected {termcolor.colored('[ENTER] to exit, [help] for quantities', 'grey')}: ")
             if quantity == "":
                 # Break the loop will exit the program
                 break
+            
+            if (quantity.lower() == "h") or (quantity.lower() == "help"):
+                if quantities_help() == True:
+                    os.system("cls")
+                    continue
             
             # Edit the file
             total_move = move + "," + quantity
