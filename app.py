@@ -277,7 +277,8 @@ def quantities_help():
 try:
     termcolor.cprint("Welcome to Turtle Nursery", "blue", attrs=["underline"])
     print(termcolor.colored("Turtle nursery", "cyan") + " helps a user to use the turtle module in python without coding.")
-
+    print("Hit " + termcolor.colored("[CTRL+C]", "grey") + " on your keyboard to continue")
+    
     while True:
         print("\r", end="\r")
         
